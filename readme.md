@@ -4,7 +4,7 @@ A robust and production-proven CLI-based work queue system with worker managemen
 
 ## Overview
 
-QueueCTL is a command line tool to effectively manage your background jobs. It is a simple but powerful way to enqueue, process and monitor background jobs, with integrated retry and dead letter queue support. 
+QueueCTL is the command line interface for managing your background jobs with queue and worker. It offers a simple but powerful API for enqueuing, processing and monitoring background jobs, with native support for retry and dead letter queue.
 
 ### Key Features
 
