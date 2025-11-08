@@ -172,8 +172,10 @@ QueueCTL has a comprehensive error mechanism that distinguishes between transi
 The behavior of the system can be modified through runtime configuration and stored in the database settings. This layered approach lets you specify default configurations for the entire system, as well as override them for specific deployments. Changes to configuration take immediate effect, without the need to restart the system, allowing the system to be customized to different operating environments.
 by default max retires will be 3 and exponential backoff value will be 2
 #### Exponentail Backoff is caliculated in this way:
-The exponential backoff policy is used when fetching failed jobs. Doing so prevents systems from being flooded by transient failures, and also reduces contention. The backoff time is calculated as `backoff_base ^ attempts` in seconds where backoff_base is a c­­onfigurable parameter (default value 2) and attempts is the number of attempts to retry the job.
-For instance, with the default configuration, a failing job would be retried in the following sequence: 
+The exponential backoff policy is used when fetching failed jobs. Doing so prevents systems from being flooded by transient failures, and also reduces contention. 
+The backoff time is calculated as `backoff_base ^ attempts` in seconds where backoff_base is a c­­onfigurable parameter (default value 2) and attempts is the number of attempts to retry the job.
+For instance, with the default configuration, 
+A failing job would be retried in the following sequence: 
 first failure wait 2 seconds (2¹) before retrying. After that, if it fails again, the wait time is doubled to 4 seconds (2²), and after the third failure, it backs off 8 seconds (2³). When job fails more than maximum times (default 3), it is re-queued to dead letter queue for manual examination. Consequently, this exponential backoff in wait times eases the system’s load and allows for better recovery from transitory faults. 
 
 
