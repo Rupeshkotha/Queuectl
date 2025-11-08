@@ -238,40 +238,6 @@ Verify that a simple job enqueued into the system is processed by a worker and m
 queuectl enqueue '{"id":"tc1-job","command":"echo Hello_TC1"}'
 ```
 
-**2. Check queue status before starting worker:**
-
-```bash
-queuectl status
-```
-
-**3. Start a worker:**
-
-```bash
-queuectl worker start --count 1
-```
-
-**4. Wait a few seconds and recheck status:**
-
-```bash
-queuectl status
-```
-
-**5. List Completed Jobs:**
-
-```bash
-queuectl list --state completed
-```
-
-**6. Stop the worker:**
-
-```bash
-queuectl worker stop
-```
-
-#### Expected Outputs
-
-**After enqueue:**
-
 ```
 ✓ Job enqueued successfully
 ┌─ Job Details ─────────────────────────────────┐
@@ -283,7 +249,11 @@ queuectl worker stop
 └───────────────────────────────────────────────┘
 ```
 
-**After the first status (before worker start):**
+**2. Check queue status before starting worker:**
+
+```bash
+queuectl status
+```
 
 ```
 ✓ Status retrieved
@@ -304,7 +274,17 @@ queuectl worker stop
 └───────────────────────────────────────────────┘
 ```
 
-**After starting worker and waiting:**
+**3. Start a worker:**
+
+```bash
+queuectl worker start --count 1
+```
+
+**4. Wait a few seconds and recheck status:**
+
+```bash
+queuectl status
+```
 
 ```
 ✓ Status retrieved
@@ -325,7 +305,13 @@ queuectl worker stop
 └───────────────────────────────────────────────┘
 ```
 
-**Completed jobs list should include:**
+
+
+**5. List Completed Jobs:**
+
+```bash
+queuectl list --state completed
+```
 
 ```
 ✔ Found 1 job(s) with state: completed
@@ -337,6 +323,14 @@ queuectl worker stop
 │            │                            │          │            │ 20:26:26           │                    │        
 └────────────┴────────────────────────────┴──────────┴────────────┴────────────────────┴────────────────────┘  
 ```
+
+**6. Stop the worker:**
+
+```bash
+queuectl worker stop
+```
+
+
 
 #### Pass Criteria
 
@@ -364,6 +358,23 @@ queuectl config set max_retries 3
 queuectl config set backoff_base 2
 ```
 
+```
+✓ Configuration updated
+┌─ Config Set ──────────────────────┐
+│                                   │
+│  Key: max_retries                 │
+│  New Value: 3                     │
+│                                   │
+└───────────────────────────────────┘
+✓ Configuration updated
+┌─ Config Set ──────────────────────┐
+│                                   │
+│  Key: backoff_base                │
+│  New Value: 2                     │
+│                                   │
+└───────────────────────────────────┘
+```
+
 This means the system will retry each failed job up to 3 times, with exponential backoff delays: 1s → 2s → 4s → 8s between attempts.
 
 **2. Enqueue a job that will intentionally fail:**
@@ -385,46 +396,6 @@ The movement will be very fast it would be better if you observe this in web int
 ```bash
 queuectl status
 ```
-
-You should observe:
-
-- The job moving between processing and pending as retries occur (if in terminal)
-- Eventually, it disappears from main jobs and appears in DLQ
-
-**5. View DLQ contents:**
-
-```bash
-queuectl dlq list
-```
-
-**6. Stop all workers:**
-
-```bash
-queuectl worker stop
-```
-
-#### Expected Output
-
-**Config set confirmation:**
-
-```
-✓ Configuration updated
-┌─ Config Set ──────────────────────┐
-│                                   │
-│  Key: max_retries                 │
-│  New Value: 3                     │
-│                                   │
-└───────────────────────────────────┘
-✓ Configuration updated
-┌─ Config Set ──────────────────────┐
-│                                   │
-│  Key: backoff_base                │
-│  New Value: 2                     │
-│                                   │
-└───────────────────────────────────┘
-```
-
-**Intermediate Status Checks:**
 
 ```
 ✓ Status retrieved
@@ -461,9 +432,7 @@ queuectl worker stop
 │                                               │
 └───────────────────────────────────────────────┘
 ```
-
-**Final system status:**
-
+Final State
 ```
 ✓ Status retrieved
 ┌─ Queue Status ────────────────────────────────┐
@@ -483,7 +452,16 @@ queuectl worker stop
 └───────────────────────────────────────────────┘
 ```
 
-**DLQ contents:**
+You should observe:
+
+- The job moving between processing and pending as retries occur (if in terminal)
+- Eventually, it disappears from main jobs and appears in DLQ
+
+**5. View DLQ contents:**
+
+```bash
+queuectl dlq list
+```
 
 ```
 ✓ Found 1 job(s) in the DLQ.
@@ -497,6 +475,14 @@ queuectl worker stop
 │               │                    │          │ program or batch file.       │                      │
 └───────────────┴────────────────────┴──────────┴──────────────────────────────┴──────────────────────┘
 ```
+
+
+**6. Stop all workers:**
+
+```bash
+queuectl worker stop
+```
+
 
 #### Pass Criteria
 
