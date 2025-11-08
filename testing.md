@@ -380,7 +380,7 @@ queuectl worker start --count 1
 
 **4. Monitor job state over time:**
 
-Run this several times over approximately 30 seconds:
+You cant see the movment with in the terminal so you can see the difference in web interface:
 
 ```bash
 queuectl status
@@ -388,7 +388,7 @@ queuectl status
 
 You should observe:
 
-- The job moving between processing and pending as retries occur
+- The job moving between processing and pending as retries occur (if in terminal)
 - Eventually, it disappears from main jobs and appears in DLQ
 
 **5. View DLQ contents:**
