@@ -89,7 +89,7 @@ queuectl enqueue '<json-string>' [options]
 
 ```bash
 queuectl enqueue '{"id":"job1","command":"echo Hello World"}'
-queuectl enqueue '{"id":"job2","command":"sleep 5"}' --retries 5 --at "2025-11-07T10:30:00Z"
+queuectl enqueue '{"id":"job2","command":"sleep 5"}' --retries 5 --at "2025-11-12T10:30:00Z"
 ```
 
 **Options:**
