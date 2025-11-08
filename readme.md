@@ -133,7 +133,7 @@ QueueCTL employs SQLite as the underlying persistence store. The database file
 
 ## Testing
 
-For detailed test cases and verification steps, please refer to the [TESTING.md](TESTING.md) file. This document includes:
+For detailed test cases and verification steps, please refer to the [TESTING.md](testing.md) file. This document includes:
 
 - Test scenarios for all major features
 - Step-by-step verification procedures
@@ -143,7 +143,7 @@ For detailed test cases and verification steps, please refer to the [TESTING.md]
 ## Architecture
 
 ### Core Design Philosophy
-QueueCTL is simple and robust at its core, based on modular structure that cleanly separates CLI, job processing, and data storage. It's lightweight, but powerful: you can use it to perform background job processing with very little fuss.
+QueueCTL is simple and robust at its core, based on modular structure that cleanly separates CLI, job processing, and data storage. It's lightweight, but powerful you can use it to perform background job processing with very little fuss.
 
 ### Architecture Diagram
 
