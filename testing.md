@@ -181,9 +181,8 @@ queuectl dlq list
 - Job ID
 - Command
 - Attempts
-- status code (0,1,2)
-- Started at
-- Available at
+- Error
+- Failed at
 
 **Retry a DLQ Job:**
 
