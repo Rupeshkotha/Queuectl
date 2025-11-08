@@ -1,4 +1,4 @@
-# QueueCTL 🚀
+# QueueCTL 
 
 A robust and production-proven CLI-based work queue system with worker management, automatic retrying of failed jobs and support for dead letter queues.
 
