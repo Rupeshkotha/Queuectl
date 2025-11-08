@@ -1,33 +1,21 @@
-# QueueCTL 🚀
+# QueueCTL 
 
 A robust and production-proven CLI-based work queue system with worker management, automatic retrying of failed jobs and support for dead letter queues.
 
 ## Overview
 
-QueueCTL is a command line tool to effectively manage your background jobs. It is a simple but powerful way to enqueue, process and monitor background jobs, with integrated retry and dead letter queue support. 
+QueueCTL is the command line interface for managing your background jobs with queue and worker. It offers a simple but powerful API for enqueuing, processing and monitoring background jobs, with native support for retry and dead letter queue.
 
 ### Key Features
 
 - **Job Management**: Enqueue, list and monitor background jobs.
 - **Worker Pool**: Start multiple worker processes concurrently.
-- **Automatic Retries**: Exponential backoff for failed jobs can be customized.
-- **Dead Letter Queue**: Process jobs that failed forever in a nice way.
+- **Automatic Retries**: Exponential backoff for failed jobs can be automatically retried.
+- **Dead Letter Queue**: Processed jobs that failed forever will go to seperate table that is DLQ .
 - **Persistence**: Job state survives restarts.
 - **CLI Interface**: User-friendly CLI with informative output.
 
-##  Installation
 
-```bash
-# Clone the repository
-git clone https://github.com/yourusername/queue_ctl.git
-cd queue_ctl
-
-# Install dependencies
-npm install
-
-# Make the CLI globally available
-npm link
-```
 
 ## References
 
@@ -47,8 +35,6 @@ npm link
 - [Building a Command Line Tool with Node.js](https://developer.okta.com/blog/2019/06/18/command-line-app-with-nodejs)
 - [Commander.js Documentation](https://github.com/tj/commander.js#readme)
 
-
-
 #### Queue & Background Jobs
 - [Node.js Background Jobs & Workers](https://blog.logrocket.com/asynchronous-task-processing-in-node-js/)
 - [Building a Job Queue in Node.js](https://blog.logrocket.com/implementing-job-queue-node-js/)
@@ -65,7 +51,6 @@ npm link
 - [Command Line Interface Guidelines](https://clig.dev/)
 - [14 great tips to make amazing CLI applications](https://dev.to/wesen/14-great-tips-to-make-amazing-cli-applications-3gp3)
 - [12 Factor CLI Apps](https://medium.com/@jdxcode/12-factor-cli-apps-dd3c227a0e46)
-
 
 ## Setup Instructions
 
@@ -111,23 +96,19 @@ This will start the dashboard server. By default, it runs on `http://localhost:3
 #### Dashboard Features:
 - **Real-time Status Overview**
   - Shows Current job queue status at a glance
-  - Shows Number of Processing, pending, failed, dead and completed jobs
+  - Shows Number of Processing, Pending, Failed, Dead and Completed jobs
   - Shows Active Workers
 
 - **Interactive Job Tables**
-  - Sortable and searchable job listings
+  - Seperate tables listed for every state (Processing, Pending, Failed, Dead and Completed jobs)
   - Color-coded job status indicators
   - Click any status to view detailed job information in a modal
   
 - **Dead Letter Queue (DLQ) Management**
   - View all failed jobs that exceeded retry limits
-  - One-click requeue functionality for failed jobs
   - Error messages and stack traces
 
   
-
-
-
 ### Database Setup
 
 QueueCTL employs SQLite as the underlying persistence store. The database file (`jobs.db`) will be created automatically in the root of your project when you execute the application for the first time. 
@@ -152,7 +133,7 @@ QueueCTL employs SQLite as the underlying persistence store. The database file
 
 ## Testing
 
-For detailed test cases and verification steps, please refer to the [TESTING.md](TESTING.md) file. This document includes:
+For detailed test cases and verification steps, please refer to the [TESTING.md](testing.md) file. This document includes:
 
 - Test scenarios for all major features
 - Step-by-step verification procedures
@@ -162,7 +143,7 @@ For detailed test cases and verification steps, please refer to the [TESTING.md]
 ## Architecture
 
 ### Core Design Philosophy
-QueueCTL is simple and robust at its core, based on modular structure that cleanly separates CLI, job processing, and data storage. It's lightweight, but powerful: you can use it to perform background job processing with very little fuss.
+QueueCTL is simple and robust at its core, based on modular structure that cleanly separates CLI, job processing, and data storage. It's lightweight, but powerful you can use it to perform background job processing with very little fuss.
 
 ### Architecture Diagram
 
@@ -172,7 +153,7 @@ QueueCTL is simple and robust at its core, based on modular structure that clean
 ### Database Design
 QueueCTL relies on solid SQLite database that maintains data integrity even if you have to restart the app. The schema is deﬁned with 3 main tables:
 
-1. **Jobs Table**: he primary source of active jobs, containing all job data needed to run it– such as the command to execute, its current state, how many retry attempts it has had and timestamps. The `available_at` field supports deferred job execution, and the `exit_code` holds the executed command's exit code.
+1. **Jobs Table**: The primary source of active jobs, containing all job data such as the command to execute, its current state, how many retry attempts it has had and timestamps etc. The `available_at` field supports deferred job execution, and the `exit_code` holds the executed command's exit code.
 
 2. **Dead Letter Queue (DLQ)**: A special table to store the failed jobs after all retry attempts. It’s the safety blanket of the process, and it means that the admins never lose sight of the problematic jobs and may take a closer look on them, or even requeue them.
 
@@ -189,10 +170,13 @@ QueueCTL has a comprehensive error mechanism that distinguishes between transi
 
 ### Configuration Management
 The behavior of the system can be modified through runtime configuration and stored in the database settings. This layered approach lets you specify default configurations for the entire system, as well as override them for specific deployments. Changes to configuration take immediate effect, without the need to restart the system, allowing the system to be customized to different operating environments.
+by default max retires will be 3 and exponential backoff value will be 2
+#### Exponentail Backoff is caliculated in this way:
+The exponential backoff policy is used when fetching failed jobs. Doing so prevents systems from being flooded by transient failures, and also reduces contention. 
+The backoff time is calculated as `backoff_base ^ attempts` in seconds where backoff_base is a c­­onfigurable parameter (default value 2) and attempts is the number of attempts to retry the job.
 
-
-### Monitoring and Observability
-The system is all logged, with a variety of log verbosity levels. The CLI has subcommands to query the system for its current state: workers, jobs counts by state, and detailed info on jobs. This now allows system administrators to confirm the status of queue system in a production environment. Provides a web interface to monitor the system and Logs output for all tasks executed on Remote system
+#### A failing job would be retried in the following sequence: 
+first failure wait 2 seconds (2¹) before retrying. After that, if it fails again, the wait time is doubled to 4 seconds (2²), and after the third failure, it backs off 8 seconds (2³). When job fails more than maximum times (default 3), it is re-queued to dead letter queue for manual examination. Consequently, this exponential backoff in wait times eases the system’s load and allows for better recovery from transitory faults. 
 
 
 ## Assumptions & Trade-offs
@@ -202,7 +186,7 @@ The system is all logged, with a variety of log verbosity levels. The CLI has 
 - Moderate job volume (not designed for thousands of jobs per second)
 - Jobs complete within a reasonable time (not long-running processes)
 - No need for distributed processing across multiple machines
-- Both CLI and web dashboard access required
+- Both CLI and web dashboard access available
 
 ### Tooling Choices
 - **Commander.js** for building the CLI interface
@@ -216,7 +200,6 @@ The system is all logged, with a variety of log verbosity levels. The CLI has 
 - **SQLite** for data persistence
   - Zero-configuration database
   - Single file storage
-  - ACID compliant
 - **Chalk & Ora** for CLI UX
   - Better terminal output formatting
   - Loading spinners for better user feedback
@@ -225,7 +208,6 @@ The system is all logged, with a variety of log verbosity levels. The CLI has 
 - Chose SQLite for simplicity over distributed databases
 - Single-node architecture limits horizontal scaling
 - Basic error handling without complex recovery
-- No built-in authentication/authorization
 - Web dashboard provides visual monitoring alongside CLI
 
 
