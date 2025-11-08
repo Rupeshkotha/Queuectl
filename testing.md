@@ -380,7 +380,7 @@ This means the system will retry each failed job up to 3 times, with exponential
 **2. Enqueue a job that will intentionally fail:**
 
 ```bash
-queuectl enqueue '{"id":"tc2-job","command":"invalid_command_xyz"}' --retries 3
+queuectl enqueue '{"id":"tc2-job","command":"invalid_command_xyz"}'
 ```
 
 **3. Start one worker:**
