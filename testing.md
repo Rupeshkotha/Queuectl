@@ -380,7 +380,7 @@ queuectl worker start --count 1
 
 **4. Monitor job state over time:**
 
-You cant see the movment with in the terminal so you can see the difference in web interface:
+The movement will be very fast it would be better if you observe this in web interface:
 
 ```bash
 queuectl status
