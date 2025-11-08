@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Queuectl Dashboard</title>
+  <link rel="stylesheet" href="index.css">
+</head>
+<body>
+
+  <div class="container">
+    <h1>Queuectl Dashboard</h1>
+
+    <div class="grid">
+      <div class="card">
+        <h2>Job Status</h2>
+        <div class="stat" onclick="showModal('pending')">
+          <span class="stat-label">Pending</span>
+          <span class="stat-value" id="status-pending">0</span>
+        </div>
+        <div class="stat" onclick="showModal('failed')">
+          <span class="stat-label">Failed (Retryable)</span>
+          <span class="stat-value" id="status-failed">0</span>
+        </div>
+        <div class="stat" onclick="showModal('processing')">
+          <span class="stat-label">Processing</span>
+          <span class="stat-value" id="status-processing">0</span>
+        </div>
+        <div class="stat" onclick="showModal('completed')">
+          <span class="stat-label">Completed</span>
+          <span class="stat-value" id="status-completed">0</span>
+        </div>
+        <div class="stat" onclick="showModal('dead')">
+          <span class="stat-label">Dead Letter</span>
+          <span class="stat-value" id="status-dead">0</span>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2>Worker Status</h2>
+        <div class="stat">
+          <span class="stat-label">Active Workers</span>
+          <span class="stat-value" id="status-workers">0</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="job-modal-overlay" class="modal-overlay" onclick="closeModal()">
+    <div class="modal-content" onclick="event.stopPropagation()">
+      <span class="modal-close" onclick="closeModal()">&times;</span>
+      <h2 id="modal-title">Job List</h2>
+      <div class="modal-body" id="modal-body">
+        </div>
+    </div>
+  </div>
+
+  <script>
+    const API_STATUS_URL = '/api/status';
+
+    function updateText(id, value) {
+      const el = document.getElementById(id);
+      if (el) el.innerText = value;
+    }
+
+    async function updateDashboardCounts() {
+      try {
+        const response = await fetch(API_STATUS_URL);
+        const data = await response.json();
+
+        updateText('status-pending', data.counts.pending);
+        updateText('status-failed', data.counts.failed);
+        updateText('status-processing', data.counts.processing);
+        updateText('status-completed', data.counts.completed);
+        updateText('status-dead', data.counts.dead);
+        updateText('status-workers', data.counts.active_workers); 
+        
+      } catch (err) {
+        console.error('Error fetching dashboard counts:', err);
+      }
+    }
+    const modalOverlay = document.getElementById('job-modal-overlay');
+    const modalTitle = document.getElementById('modal-title');
+    const modalBody = document.getElementById('modal-body');
+
+    async function showModal(state) {
+      modalTitle.innerText = `Job List: ${state.charAt(0).toUpperCase() + state.slice(1)}`;
+      modalBody.innerHTML = '<p>Loading...</p>';
+      modalOverlay.classList.add('visible');
+
+      try {
+        const response = await fetch(`/api/jobs?state=${state}`);
+        const jobs = await response.json();
+        
+        if (response.status !== 200) {
+          throw new Error(jobs.error || 'Failed to load jobs');
+        }
+
+        buildJobTable(jobs, state);
+      } catch (err) {
+        modalBody.innerHTML = `<p class="error">Error: ${err.message}</p>`;
+      }
+    }
+
+    function buildJobTable(jobs, state) {
+      if (jobs.length === 0) {
+        modalBody.innerHTML = '<p>No jobs found in this state.</p>';
+        return;
+      }
+
+      let headers;
+      let rows;
+      const formatDate = (dateString) => {
+        try {
+          return new Date(dateString).toLocaleString();
+        } catch (e) {
+          return dateString || 'N/A';
+        }
+      };
+
+      if (state === 'dead') {
+        headers = ['ID', 'Command', 'Attempts', 'Created At', 'Updated At', 'Error'];
+        rows = jobs.map(job => `
+          <tr>
+            <td>${job.id}</td>
+            <td>${job.command}</td>
+            <td>${job.attempts}</td>
+            <td>${formatDate(job.created_at)}</td>
+            <td>${formatDate(job.updated_at)}</td>
+            <td class="error">${job.error || 'N/A'}</td>
+          </tr>
+        `).join('');
+      } else {
+        headers = ['ID', 'Command', 'Attempts', 'Created At', 'Updated At', 'Available At'];
+        rows = jobs.map(job => `
+          <tr>
+            <td>${job.id}</td>
+            <td>${job.command}</td>
+            <td>${job.attempts}</td>
+            <td>${formatDate(job.created_at)}</td>
+            <td>${formatDate(job.updated_at)}</td>
+            <td>${formatDate(job.available_at)}</td>
+          </tr>
+        `).join('');
+      }
+
+      modalBody.innerHTML = `
+        <table>
+          <thead>
+            <tr>${headers.map(h => `<th>${h}</th>`).join('')}</tr>
+          </thead>
+          <tbody>
+            ${rows}
+          </tbody>
+        </table>
+      `;
+    }
+    function closeModal() {
+      modalOverlay.classList.remove('visible');
+      modalBody.innerHTML = '';
+    }
+    setInterval(updateDashboardCounts, 2000);
+    updateDashboardCounts();
+  </script>
+
+</body>
+</html>
