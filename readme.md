@@ -17,7 +17,7 @@ QueueCTL is the command line interface for managing your background jobs with 
 
 
 ### Demo Video Link:
-[Video Link]()
+[Video Link](https://drive.google.com/file/d/1MTxIcsT697GXCDcSPpTo6FNxJj7Ser1I/view?usp=sharing)
 
 
 ## Setup Instructions
