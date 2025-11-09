@@ -109,7 +109,7 @@ For detailed test cases and verification steps, please refer to the [TESTING.md]
 - Expected outcomes for each test case
 
 ## Bonus Features Implemented:
-- Scheduled jobs execution using `available_at` timestamps
+- Scheduled jobs execution using `available_at` timestamps (instead of `run_at` I have named as `available_at` and this timestamp indicates that worker can process it only at this time stamp)
 - web dashboard Interface
 - Job output logging (Run `node worker.js` for output logs)
 
