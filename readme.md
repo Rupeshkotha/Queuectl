@@ -59,7 +59,7 @@ To start the web dashboard, use the following command:
 nodemon dashboard.js
 ```
 
-This will start the dashboard server. By default, it runs on `http://localhost:3000`.
+This will start the dashboard server. By default, it runs on `http://localhost:8080`.
 
 #### Dashboard Features:
 - **Real-time Status Overview**
