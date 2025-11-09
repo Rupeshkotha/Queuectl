@@ -5,6 +5,7 @@ A robust and production-proven CLI-based work queue system with worker managemen
 ## Overview
 
 QueueCTL is the command line interface for managing your background jobs with queue and worker. It offers a simple but powerful API for enqueuing, processing and monitoring background jobs, with native support for retry and dead letter queue.
+You can run it purely from the CLI or pair it with a web dashboard for live job tracking and DLQ management.
 
 ### Key Features
 
@@ -108,8 +109,9 @@ For detailed test cases and verification steps, please refer to the [TESTING.md]
 - Expected outcomes for each test case
 
 ## Bonus Features Implemented:
-- Scheduled jobs ( available_at )
+- Scheduled jobs execution using `available_at` timestamps
 - web dashboard Interface
+- Job output logging (Run `node worker.js` for output logs)
 
 
 ## Architecture
