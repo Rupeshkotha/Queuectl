@@ -16,41 +16,9 @@ QueueCTL is the command line interface for managing your background jobs with 
 - **CLI Interface**: User-friendly CLI with informative output.
 
 
+### Demo Video Link:
+[Video Link]()
 
-## References
-
-### Core Dependencies
-- [Commander.js](https://www.npmjs.com/package/commander) - Complete solution for Node.js command-line interfaces
-- [SQLite3](https://www.npmjs.com/package/sqlite3) - Asynchronous SQLite3 database driver
-- [Chalk](https://www.npmjs.com/package/chalk) - Terminal string styling
-- [Figlet](https://www.npmjs.com/package/figlet) - ASCII art text generator
-- [Ora](https://www.npmjs.com/package/ora) - Elegant terminal spinner
-- [Boxen](https://www.npmjs.com/package/boxen) - Create boxes in the terminal
-- [cli-table3](https://www.npmjs.com/package/cli-table3) - Beautiful formatted tables
-
-### Learning Resources
-
-#### CLI Development
-- [How CLIs in Node.js Actually Work](https://eytanmanor.medium.com/how-clis-in-node-js-actually-work-c26f913a335e)
-- [Building a Command Line Tool with Node.js](https://developer.okta.com/blog/2019/06/18/command-line-app-with-nodejs)
-- [Commander.js Documentation](https://github.com/tj/commander.js#readme)
-
-#### Queue & Background Jobs
-- [Node.js Background Jobs & Workers](https://blog.logrocket.com/asynchronous-task-processing-in-node-js/)
-- [Building a Job Queue in Node.js](https://blog.logrocket.com/implementing-job-queue-node-js/)
-
-#### SQLite with Node.js
-- [SQLite3 Node.js Guide](https://dev.to/simonmackie/a-comprehensive-guide-to-using-sqlite-with-nodejs-549i)
-- [SQLite with Node.js Tutorial](https://www.sqlitetutorial.net/sqlite-nodejs/)
-
-#### CLI UX Best Practices
-- [Command Line Interface Guidelines](https://clig.dev/)
-- [14 great tips to make amazing CLI applications](https://dev.to/wesen/14-great-tips-to-make-amazing-cli-applications-3gp3)
-- [12 Factor CLI Apps](https://medium.com/@jdxcode/12-factor-cli-apps-dd3c227a0e46)
-
-#### Other References
-- [Exponential Backoff in Distributed Systems](https://medium.com/bobble-engineering/how-does-exponential-backoff-work-90ef02401c65)
-- [Node.js Retry Strategies](https://blog.logrocket.com/rate-limiting-node-js/)
 
 ## Setup Instructions
 
@@ -214,5 +182,41 @@ first failure wait 2 seconds (2¹) before retrying. After that, if it fails agai
 - Single-node architecture limits horizontal scaling
 - Basic error handling without complex recovery
 - Web dashboard provides visual monitoring alongside CLI
+
+
+## References
+
+### Core Dependencies
+- [Commander.js](https://www.npmjs.com/package/commander) - Complete solution for Node.js command-line interfaces
+- [SQLite3](https://www.npmjs.com/package/sqlite3) - Asynchronous SQLite3 database driver
+- [Chalk](https://www.npmjs.com/package/chalk) - Terminal string styling
+- [Figlet](https://www.npmjs.com/package/figlet) - ASCII art text generator
+- [Ora](https://www.npmjs.com/package/ora) - Elegant terminal spinner
+- [Boxen](https://www.npmjs.com/package/boxen) - Create boxes in the terminal
+- [cli-table3](https://www.npmjs.com/package/cli-table3) - Beautiful formatted tables
+
+### Learning Resources
+
+#### CLI Development
+- [How CLIs in Node.js Actually Work](https://eytanmanor.medium.com/how-clis-in-node-js-actually-work-c26f913a335e)
+- [Building a Command Line Tool with Node.js](https://developer.okta.com/blog/2019/06/18/command-line-app-with-nodejs)
+- [Commander.js Documentation](https://github.com/tj/commander.js#readme)
+
+#### Queue & Background Jobs
+- [Node.js Background Jobs & Workers](https://blog.logrocket.com/asynchronous-task-processing-in-node-js/)
+- [Building a Job Queue in Node.js](https://blog.logrocket.com/implementing-job-queue-node-js/)
+
+#### SQLite with Node.js
+- [SQLite3 Node.js Guide](https://dev.to/simonmackie/a-comprehensive-guide-to-using-sqlite-with-nodejs-549i)
+- [SQLite with Node.js Tutorial](https://www.sqlitetutorial.net/sqlite-nodejs/)
+
+#### CLI UX Best Practices
+- [Command Line Interface Guidelines](https://clig.dev/)
+- [14 great tips to make amazing CLI applications](https://dev.to/wesen/14-great-tips-to-make-amazing-cli-applications-3gp3)
+- [12 Factor CLI Apps](https://medium.com/@jdxcode/12-factor-cli-apps-dd3c227a0e46)
+
+#### Other References
+- [Exponential Backoff in Distributed Systems](https://medium.com/bobble-engineering/how-does-exponential-backoff-work-90ef02401c65)
+- [Node.js Retry Strategies](https://blog.logrocket.com/rate-limiting-node-js/)
 
 
