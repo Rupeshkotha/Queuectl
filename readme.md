@@ -43,14 +43,14 @@ QueueCTL is the command line interface for managing your background jobs with 
 - [SQLite3 Node.js Guide](https://dev.to/simonmackie/a-comprehensive-guide-to-using-sqlite-with-nodejs-549i)
 - [SQLite with Node.js Tutorial](https://www.sqlitetutorial.net/sqlite-nodejs/)
 
-#### Error Handling & Retries
-- [Exponential Backoff in Distributed Systems](https://medium.com/bobble-engineering/how-does-exponential-backoff-work-90ef02401c65)
-- [Node.js Retry Strategies](https://blog.logrocket.com/rate-limiting-node-js/)
-
 #### CLI UX Best Practices
 - [Command Line Interface Guidelines](https://clig.dev/)
 - [14 great tips to make amazing CLI applications](https://dev.to/wesen/14-great-tips-to-make-amazing-cli-applications-3gp3)
 - [12 Factor CLI Apps](https://medium.com/@jdxcode/12-factor-cli-apps-dd3c227a0e46)
+
+#### Other References
+- [Exponential Backoff in Distributed Systems](https://medium.com/bobble-engineering/how-does-exponential-backoff-work-90ef02401c65)
+- [Node.js Retry Strategies](https://blog.logrocket.com/rate-limiting-node-js/)
 
 ## Setup Instructions
 
@@ -139,6 +139,10 @@ For detailed test cases and verification steps, please refer to the [TESTING.md]
 - Step-by-step verification procedures
 - Expected outcomes for each test case
 
+## Bonus Features Implemented:
+- Scheduled jobs ( available_at )
+- web dashboard Interface
+
 
 ## Architecture
 
@@ -171,6 +175,7 @@ QueueCTL has a comprehensive error mechanism that distinguishes between transi
 ### Configuration Management
 The behavior of the system can be modified through runtime configuration and stored in the database settings. This layered approach lets you specify default configurations for the entire system, as well as override them for specific deployments. Changes to configuration take immediate effect, without the need to restart the system, allowing the system to be customized to different operating environments.
 by default max retires will be 3 and exponential backoff value will be 2
+
 #### Exponentail Backoff is caliculated in this way:
 The exponential backoff policy is used when fetching failed jobs. Doing so prevents systems from being flooded by transient failures, and also reduces contention. 
 The backoff time is calculated as `backoff_base ^ attempts` in seconds where backoff_base is a c­­onfigurable parameter (default value 2) and attempts is the number of attempts to retry the job.
