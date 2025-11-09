@@ -62,7 +62,7 @@ QueueCTL is the command line interface for managing your background jobs with 
 
 1. **Clone the repository**
    ```bash
-   git clone https://github.com/yourusername/queue_ctl.git
+   git clone https://github.com/Rupeshkotha/Queuectl
    cd queue_ctl
    ```
 
@@ -152,7 +152,7 @@ QueueCTL is simple and robust at its core, based on modular structure that clean
 ### Architecture Diagram
 
 ![QueueCTL Architecture Diagram](./Architecture_flowchart.png)
-*Figure 1: QueueCTL System Architecture*
+
 
 ### Database Design
 QueueCTL relies on solid SQLite database that maintains data integrity even if you have to restart the app. The schema is deﬁned with 3 main tables:
